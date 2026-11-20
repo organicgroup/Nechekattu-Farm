@@ -25,29 +25,28 @@ Optional: from the extracted folder, run `python3 -m http.server 8080`, then vis
 | Visitor terms | `terms.html` |
 | Photography credits | `credits.html` |
 
-## Add official contact details
+## Official contact details
 
-Edit `assets/js/config.js` with any text editor. Fill the empty strings with **confirmed** details:
+Confirmed visitor contact details are configured in `assets/js/config.js`:
 
-- `email`: official visitor-enquiry email.
-- `phone`: official phone, with country code.
-- `whatsappNumber`: WhatsApp number with country code, digits only.
+- Email: `hrd@plantrich.com`.
+- Phone and WhatsApp: `+91 97786 99064` (`919778699064` for WhatsApp links).
+- Google Maps: the confirmed Nechekattu Farm location.
 - `instagramUrl` and `facebookUrl`: official HTTPS profile URLs.
 - `websiteUrl`: final HTTPS site origin; optional.
-- `mapsUrl`: replace the town-level map with a confirmed farm pin when available.
 
-The map anchors currently point to Vandiperiyar as an area, not to a fabricated farm location. The map configuration updates links in the browser. Replace the matching Google Maps links in the HTML pages as well if you want the new destination available without JavaScript. Phone, email, WhatsApp and social links are activated from the config file. No personal contact details have been invented.
+The confirmed contact and map links are also present directly in the HTML where a useful no-JavaScript fallback is needed.
 
 ## How the enquiry form works
 
-The form validates required fields, email, phone number, date, visitor count and consent. It builds a readable visit enquiry and opens a preview.
+The form validates required fields, email, phone number, date, visitor count and consent. On submission it builds a readable visit enquiry and opens a WhatsApp draft addressed to the configured farm number, while retaining a preview and fallback actions.
 
 - **Copy Enquiry** copies the message. If a browser blocks clipboard access, **Download .txt** remains available.
 - **Download .txt** creates a local text file.
-- Once a valid official email is configured, **Email Enquiry** opens the visitor's email client with a prepared draft.
-- Once a valid WhatsApp number is configured, **Open WhatsApp** opens a prepared message to that number.
+- **Email Enquiry** opens the visitor's email client with a prepared draft.
+- **Open WhatsApp** opens the prepared message to `+91 97786 99064`.
 
-There is no backend and no automatic delivery. The visitor must send the draft in the selected service. No enquiry is called a confirmed booking. With empty contact details, the visitor is told honestly that the message has not been sent and can be copied or downloaded. The website does not retain enquiry data in browser storage.
+There is no backend and no automatic delivery. The visitor must review and send the draft in WhatsApp or email. No enquiry is called a confirmed booking, and the website does not retain enquiry data in browser storage.
 
 For automatic delivery or a booking database, connect your own form service/backend and update the privacy notice to reflect the final setup.
 
@@ -80,7 +79,7 @@ Tailwind CSS is already compiled. If you add new Tailwind utility classes, run `
 
 Upload the contents of this folder to the static web root on your hosting (for example, `public_html` on a typical cPanel setup), keeping paths unchanged. Start with `index.html`. HTTPS hosting is recommended.
 
-Before accepting enquiries, add official contacts and arrival directions, confirm operational details with the farm owner, and replace illustrative photos with original farm photography when available. The supplied leaf-and-coffee mark is a new typographic brand treatment, not an owner-provided official logo.
+Before accepting enquiries, confirm current visitor operations with the farm owner. The supplied leaf-and-coffee mark is a new typographic brand treatment, not an owner-provided official logo.
 
 For production SEO, set the real absolute canonical URLs and `og:image` URLs directly in each page's `<head>` once the domain is known. `websiteUrl` also updates these in browsers, but crawlers that do not execute JavaScript need the static tags. Add your real sitemap after the domain is confirmed. No invented domain, coordinates, fees, opening hours, certifications or production volumes are included.
 

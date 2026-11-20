@@ -19,18 +19,18 @@
   function lockForDialog() { document.body.classList.add('locked'); }
   function unlockIfFree() { if (!$('dialog[open]') && !$('.menu-toggle[aria-expanded="true"]')) document.body.classList.remove('locked'); }
   $$('[data-year]').forEach(el => el.textContent = String(new Date().getFullYear()));
-  $$('[data-contact="email"]').forEach(el => { if (email) el.href = 'mailto:' + email; });
-  $$('[data-contact="phone"]').forEach(el => { if (phone) el.href = 'tel:' + phone.replace(/[^+\d]/g, ''); });
-  $$('[data-contact-label]').forEach(el => { const v = {email, phone, whatsapp: whatsapp ? '+' + whatsapp : ''}[el.dataset.contactLabel]; if (v) el.textContent = v; });
+  $$('[data-contact="email"]').forEach(el => { if (email) { el.href = 'mailto:' + email; if (!el.closest('.contact-row')) el.textContent = email; } });
+  $$('[data-contact="phone"]').forEach(el => { if (phone) { el.href = 'tel:' + phone.replace(/[^+\d]/g, ''); if (!el.closest('.contact-row')) el.textContent = phone; } });
+  $$('[data-contact-label]').forEach(el => { const v = {email, phone, whatsapp: phone || (whatsapp ? '+' + whatsapp : '')}[el.dataset.contactLabel]; if (v) el.textContent = v; });
   const configuredMap = safeURL(config.mapsUrl);
-  if (configuredMap) $$('a[href^="https://www.google.com/maps/search/"]').forEach(el => el.href = configuredMap);
+  if (configuredMap) $$('a[href^="https://www.google.com/maps/search/"], a[href^="https://maps.app.goo.gl/"]').forEach(el => el.href = configuredMap);
   $$('[data-social]').forEach(el => {
     const url = safeURL(config[el.dataset.social + 'Url']);
     if (url) { el.href = url; el.target = '_blank'; el.rel = 'noopener'; }
     else el.addEventListener('click', evt => { evt.preventDefault(); toast('Our official social profile will be added soon.'); });
   });
   $$('[data-whatsapp]').forEach(el => {
-    if (whatsapp) { el.href = 'https://wa.me/' + whatsapp + '?text=' + encodeURIComponent('Hello Nechekattu Farm, I would like to enquire about a farm visit.'); el.target = '_blank'; el.rel = 'noopener'; }
+    if (whatsapp) { el.href = 'https://wa.me/' + whatsapp + '?text=' + encodeURIComponent('Hello Nechekattu Farm, I would like to enquire about a farm visit.'); el.target = '_blank'; el.rel = 'noopener'; if (!el.closest('.contact-row')) el.textContent = 'WhatsApp · +91 97786 99064'; }
     else el.addEventListener('click', evt => {
       evt.preventDefault();
       toast('Our WhatsApp contact will be added soon. You can prepare a visit enquiry on the Visit Us page.');
@@ -127,7 +127,8 @@
     const dateInput = $('#date');
     const localToday = () => { const now = new Date(); return [now.getFullYear(),String(now.getMonth()+1).padStart(2,'0'),String(now.getDate()).padStart(2,'0')].join('-'); };
     dateInput.min = localToday();
-    if (email || whatsapp) $('[data-delivery-note]').textContent = 'Prepare your enquiry, then choose email or WhatsApp to open your message and send it to the farm team.';
+    if (whatsapp) $('[data-delivery-note]').textContent = 'Complete the form and submit to open a prepared WhatsApp message to +91 97786 99064. Review the details, then press Send in WhatsApp.';
+    else if (email) $('[data-delivery-note]').textContent = 'Complete the form to prepare an email enquiry for the farm team.';
     const validateField = (field, show = true) => {
       let error = ''; const value = field.value.trim();
       if (field.name === 'consent') { if (!field.checked) error = 'Please confirm consent before preparing your enquiry.'; }
@@ -149,9 +150,14 @@
       const data = new FormData(form); const activities = data.getAll('activities');
       enquiryText = ['NECHEKATTU FARM — VISIT ENQUIRY','', 'Name: ' + data.get('name').trim(), 'Email: ' + data.get('email').trim(), 'Phone / WhatsApp: ' + data.get('phone').trim(), 'Preferred date: ' + data.get('date'), 'Visitors: ' + data.get('visitors'), 'Experience: ' + data.get('experience'), 'Preferred activities: ' + (activities.join(', ') || 'Please advise'), '', 'Additional requirements:', data.get('requirements').trim() || 'None specified', '', 'Message:', data.get('message').trim() || 'I would like to enquire about a farm visit.', '', 'I consent to sharing these details so the farm team can respond to this enquiry.', 'I understand that the visit and seasonal activities require confirmation.'].join('\n');
       const dialog = $('.enquiry-dialog'); $('.enquiry-preview').textContent = enquiryText;
-      $('[data-enquiry-feedback]').textContent = (email || whatsapp) ? 'Your enquiry is prepared. Choose a channel below to open a draft. It has not been sent.' : 'Your enquiry is prepared. Official contact details will be added soon. Copy or download your message to keep it; it has not been sent.';
+      $('[data-enquiry-feedback]').textContent = whatsapp ? 'WhatsApp has been opened with your enquiry for +91 97786 99064. Review the details and press Send. If it did not open, use the Open WhatsApp button below.' : email ? 'Your email enquiry is prepared. Open the email draft below, review it and press Send.' : 'Your enquiry is prepared. Copy or download your message to keep it; it has not been sent.';
       const emailLink = $('[data-send-email]'); emailLink.hidden = !email; if(email) emailLink.href = 'mailto:' + email + '?subject=' + encodeURIComponent('Farm visit enquiry — ' + data.get('date')) + '&body=' + encodeURIComponent(enquiryText);
-      const waLink = $('[data-send-whatsapp]'); waLink.hidden = !whatsapp; if(whatsapp) waLink.href = 'https://wa.me/' + whatsapp + '?text=' + encodeURIComponent(enquiryText);
+      const waLink = $('[data-send-whatsapp]'); waLink.hidden = !whatsapp;
+      if(whatsapp) {
+        const waUrl = 'https://wa.me/' + whatsapp + '?text=' + encodeURIComponent(enquiryText);
+        waLink.href = waUrl;
+        window.open(waUrl, '_blank', 'noopener');
+      }
       dialog.showModal(); lockForDialog();
     });
     $('[data-copy-enquiry]').addEventListener('click', async () => {

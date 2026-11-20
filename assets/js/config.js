@@ -5,11 +5,11 @@
  */
 window.FARM_CONFIG = Object.freeze({
   name: 'Nechekattu Farm',
-  email: '',
-  phone: '',
-  whatsappNumber: '',
+  email: 'hrd@plantrich.com',
+  phone: '+91 97786 99064',
+  whatsappNumber: '919778699064',
   instagramUrl: '',
   facebookUrl: '',
   websiteUrl: '',
-  mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Vandiperiyar%2C+Kerala%2C+India'
+  mapsUrl: 'https://maps.app.goo.gl/wWmmoW4aC63C1wgL6'
 });
