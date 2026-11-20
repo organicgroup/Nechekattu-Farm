@@ -1,0 +1,56 @@
+/* Project-local refinements for the owner-supplied Nechekattu Farm photography. */
+.farm-hero-landscape{object-position:center 58%}
+.landscape-page-hero,.coffee-page-hero,.experiences-page-hero,.spice-page-hero{background-size:cover}
+.landscape-page-hero{background-image:url('../images/farm/farm-landscape.jpg');background-position:center 58%}
+.coffee-page-hero{background-image:url('../images/farm/coffee-canopy.jpg');background-position:center}
+.experiences-page-hero{background-image:url('../images/farm/farm-tour.jpg');background-position:center 48%}
+.spice-page-hero{background-image:url('../images/farm/spice-hero.png');background-position:center 43%}
+.farm-photo-focus-right{object-position:68% center}
+.farm-photo-focus-top{object-position:center 34%}
+
+.pepper-cutout-panel{
+  min-height:590px;
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+  isolation:isolate;
+  background:
+    radial-gradient(circle at 72% 24%,rgba(255,255,255,.5),transparent 28%),
+    linear-gradient(145deg,#ded7c3 0%,#eee9dc 55%,#d7c8aa 100%);
+}
+.pepper-cutout-panel::before{
+  content:'PEPPER · VANDIPERIYAR';
+  position:absolute;
+  left:30px;
+  bottom:24px;
+  color:rgba(24,59,43,.55);
+  font:700 .65rem/1 var(--sans);
+  letter-spacing:.2em;
+  z-index:2;
+}
+.pepper-cutout-panel::after{
+  content:'';
+  position:absolute;
+  width:72%;
+  aspect-ratio:1;
+  border:1px solid rgba(24,59,43,.16);
+  border-radius:50%;
+  z-index:-1;
+}
+.pepper-cutout-panel .pepper-cutout{
+  width:min(92%,560px);
+  height:auto;
+  max-height:520px;
+  object-fit:contain;
+  filter:drop-shadow(0 28px 28px rgba(34,31,20,.25));
+  transform:rotate(-2deg);
+}
+
+@media(max-width:760px){
+  .farm-hero-landscape{object-position:58% center}
+  .landscape-page-hero{background-position:58% center}
+  .spice-page-hero{background-position:center 40%}
+  .experiences-page-hero{background-position:62% center}
+  .pepper-cutout-panel{min-height:440px}
+  .pepper-cutout-panel .pepper-cutout{max-height:390px;width:88%}
+}
